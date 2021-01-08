@@ -1,0 +1,101 @@
+dofile(scriptPath().."DebugMyScript.luac")
+
+-- ========== Settings ================
+immersive = true
+setImmersiveMode(immersive)
+setAutoGameArea = true
+pcall (autoGameArea, setAutoGameArea)
+scriptDimension = 1080
+Settings:setScriptDimension(true, scriptDimension)
+Settings:setCompareDimension(true, scriptDimension)
+Image:showImgName(false) -- turn off toast notifications
+Image:highlightTime(.5) --higtlight time
+
+-- ==========  main program ===========
+
+-- [Pokemon Go] Auto Egg Hatcher & Gotcha Reconnect
+-- Github 
+
+dialogInit()
+addCheckBox("dimscreen", "Dim screen", false)
+newRow()
+addCheckBox("hatch", "Hatch Eggs", false)
+newRow()
+addCheckBox("gotcha", "Gotcha", false)
+newRow()
+addCheckBox("highlights", "Debug", false)
+newRow()
+dialogShow("Pogo")
+
+
+
+if(dimscreen) then setBrightness(0) end --dim screen
+if(highlights) then Image:highlightActive(true) end
+if not (highlights) then Image:highlightActive(false) end
+
+
+
+homeRegion = Region(499,2139,82,102)
+ohRegion = Region(463,719,174,104)
+checkMarkRegion = Region(488,2144,96,115)
+eggsRegion = Region(790,125,151,83)
+incubateRegion = Region(411,1350,248,83)
+incubatorRegion = Region(102,1956,108,72)
+exitRegion = Region(496,2146,94,97)
+
+
+-- ========= EGGS ==========
+
+eggCount = 0
+
+function eggs()
+	if(Image:R(ohRegion):exists("oh.png")) then
+		Image:R(ohRegion):existsClick("oh.png")
+		Image:R(checkMarkRegion):existsClick("checkmark.png",5)
+		if(Image:R(eggsRegion):exists("eggs.png")) then
+			click(Location(204,524))
+			wait(5)
+			Image:R(incubateRegion):existsClick("incubate.png",5)   
+			wait(2)
+			if(Image:R(incubatorRegion):exists("incubator.png")) then
+				click(Location(157,1901))
+			end
+			Image:R(exitRegion):existsClick("exit.png",5)
+			eggCount = eggCount + 1
+		end
+	end
+end
+
+
+-- ========= GOTCHA ==========
+
+function gotcha()
+	if(Image:R(homeRegion):exists("home.png")) then
+			gotchacolor = Location(987,449)
+			r,g,b = getColor(gotchacolor)
+			if(r == 47 and g == 82 and b == 119) then
+				click(Location(987,449))
+				wait(25)
+				gotchacolor = Location(987,449)
+				r,g,b = getColor(gotchacolor)
+				if(r == 47 and g == 82 and b == 119) then
+					gotcha = false
+				end
+			end
+		end
+    end
+    
+
+    while true do
+
+        setStopMessage("Eggs Hatched:".. eggCount)
+        if(gotcha) then
+            gotcha()
+        end
+
+        if (hatch) then
+            eggs()
+        end
+
+    end
+    
