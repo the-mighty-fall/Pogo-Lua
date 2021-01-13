@@ -82,20 +82,20 @@ function gotcha()
 					gotcha = false
 				end
 			end
-		end
-    end
+	end
+end
     
 
-    while true do
+while true do
 
-        setStopMessage("Eggs Hatched:".. eggCount)
-        if(gotcha) then
-            gotcha()
-        end
-
-        if (hatch) then
-            eggs()
-        end
-
+    setStopMessage("Eggs Hatched:".. eggCount)
+    if(gotcha) then
+        gotcha()
     end
+
+    if (hatch) then
+        eggs()
+    end
+
+end
     
